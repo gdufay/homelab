@@ -1,0 +1,15 @@
+services:
+  caddy-proxy:
+    image: lucaslorentz/caddy-docker-proxy:latest
+    container_name: caddy_proxy
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data2:/data
+    restart: unless-stopped
+
+volumes:
+  caddy_data2:

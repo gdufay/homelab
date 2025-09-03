@@ -1,0 +1,17 @@
+include:
+  # - ./adguard/compose.yml
+  - ./caddy-proxy/compose.yml
+  - ./homepage/compose.yml
+  - ./actual-budget/compose.yml
+  - ./tinyauth/compose.yml
+  - ./pocket-id/compose.yml
+  - ./immich/compose.yml
+
+services:
+  go-avahi-cname:
+    image: ghcr.io/grishy/go-avahi-cname:2.2.5
+    container_name: go-avahi-cname
+    network_mode: host
+    volumes:
+      - "/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket"
+    command: cname ${ACTUAL_NAME} ${TINYAUTH_NAME} ${POCKETID_NAME} ${IMMICH_NAME}

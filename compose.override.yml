@@ -1,0 +1,111 @@
+networks:
+  caddy_net:
+    driver: bridge
+    name: caddy_network
+
+services:
+  caddy-proxy:
+    networks:
+      caddy_net:
+        aliases:
+          - ${POCKETID_SUBDOMAIN}
+          - ${TINYAUTH_SUBDOMAIN}
+          - ${ACTUAL_SUBDOMAIN}
+          - ${IMMICH_SUBDOMAIN}
+          - ${HOSTNAME}
+    labels:
+      caddy: (tinyauth_forwarder)
+      caddy.forward_auth: tinyauth:3000
+      caddy.forward_auth.uri: /api/auth/caddy
+
+  homepage:
+    networks:
+      - caddy_net
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: ${HOSTNAME}
+    labels:
+      caddy: ${HOSTNAME}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.tls: "internal"
+
+  actual-server:
+    networks:
+      - caddy_net
+    labels:
+      caddy: ${ACTUAL_SUBDOMAIN}
+      caddy.reverse_proxy: "{{upstreams 5006}}"
+      caddy.tls: "internal"
+      homepage.group: Budget
+      homepage.name: Actual Budget
+      homepage.icon: actual-budget
+      homepage.href: http://${ACTUAL_SUBDOMAIN}
+      homepage.description: App for managing finances
+      homepage.showStats: true
+
+  pocket-id:
+    networks:
+      - caddy_net
+    environment:
+      - TRUST_PROXY=true
+      - APP_URL=https://${POCKETID_SUBDOMAIN}
+    labels:
+      caddy: ${POCKETID_SUBDOMAIN}
+      caddy.reverse_proxy: "{{upstreams 1411}}"
+      caddy.tls: "internal"
+      homepage.group: Auth
+      homepage.name: Pocket ID
+      homepage.icon: pocket-id
+      homepage.href: http://${POCKETID_SUBDOMAIN}
+      homepage.description: A simple OIDC provider for passwordless authentication.
+      homepage.showStats: true
+
+  tinyauth:
+    networks:
+      - caddy_net
+    environment:
+      - SECRET=${TINYAUTH_SECRET}
+      - APP_URL=https://${TINYAUTH_SUBDOMAIN}
+      - GENERIC_CLIENT_ID=${TINYAUTH_GENERIC_CLIENT_ID}
+      - GENERIC_CLIENT_SECRET=${TINYAUTH_GENERIC_CLIENT_SECRET}
+      - GENERIC_AUTH_URL=https://${POCKETID_SUBDOMAIN}/authorize
+      - GENERIC_TOKEN_URL=https://${POCKETID_SUBDOMAIN}/api/oidc/token
+      - GENERIC_USER_URL=https://${POCKETID_SUBDOMAIN}/api/oidc/userinfo
+      - GENERIC_SCOPES=openid,email,profile,groups
+      - GENERIC_NAME=Pocket ID
+      - OAUTH_AUTO_REDIRECT=generic
+      - GENERIC_SKIP_SSL=true
+    labels:
+      caddy: ${TINYAUTH_SUBDOMAIN}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+      caddy.tls: "internal"
+
+  immich-server:
+    networks:
+      - caddy_net
+    labels:
+      caddy: ${IMMICH_SUBDOMAIN}
+      caddy.reverse_proxy: "{{upstreams 2283}}"
+      caddy.tls: "internal"
+      homepage.group: Media
+      homepage.name: Immich
+      homepage.icon: immich
+      homepage.href: http://${IMMICH_SUBDOMAIN}
+      homepage.description: Self-hosted photo and video management solution.
+      homepage.showStats: true
+
+  # whoami:
+  #   container_name: whoami
+  #   image: traefik/whoami:latest
+  #   restart: unless-stopped
+  #   networks:
+  #     - caddy_net
+  #   labels:
+  #     caddy: whoami.rpi5.local
+  #     caddy.reverse_proxy: "{{upstreams 80}}"
+  #     caddy.tls: "internal"
+  #     caddy.import: tinyauth_forwarder *
+  #     homepage.group: Test
+  #     homepage.name: Whoami
+  #     homepage.icon: whoogle
+  #     homepage.href: http://whoami.rpi5.local
+  #     homepage.description: Test config
