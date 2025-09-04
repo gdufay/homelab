@@ -92,6 +92,10 @@ services:
       homepage.href: http://${IMMICH_SUBDOMAIN}
       homepage.description: Self-hosted photo and video management solution.
       homepage.showStats: true
+      homepage.widget.type: immich
+      homepage.widget.url: https://${IMMICH_SUBDOMAIN}
+      homepage.widget.key: ${IMMICH_KEY_API}
+      homepage.widget.version: 2
 
   # whoami:
   #   container_name: whoami
