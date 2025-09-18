@@ -1,0 +1,23 @@
+services:
+  manyfold:
+    image: ghcr.io/manyfold3d/manyfold-solo:latest
+    container_name: manyfold
+    volumes:
+      - ./data:/config
+      - ./libraries:/libraries
+    restart: unless-stopped
+    environment:
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    # Optional, but recommended for better security
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - SETUID
+      - SETGID
+

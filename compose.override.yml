@@ -13,6 +13,7 @@ services:
           - ${ACTUAL_SUBDOMAIN}
           - ${IMMICH_SUBDOMAIN}
           - ${SPOOLMAN_SUBDOMAIN}
+          - ${MANYFOLD_SUBDOMAIN}
           - ${HOSTNAME}
     labels:
       caddy: (tinyauth_forwarder)
@@ -113,6 +114,20 @@ services:
       homepage.showStats: true
       homepage.widget.type: spoolman
       homepage.widget.url: https://${SPOOLMAN_SUBDOMAIN}
+
+  manyfold:
+    networks:
+      - caddy_net
+    labels:
+      caddy: ${MANYFOLD_SUBDOMAIN}
+      caddy.reverse_proxy: "{{upstreams 3214}}"
+      caddy.tls: "internal"
+      homepage.group: 3D Printing
+      homepage.name: Manyfold
+      homepage.icon: manyfold
+      homepage.href: http://${MANYFOLD_SUBDOMAIN}
+      homepage.description: Organise and share your 3d print files.
+      homepage.showStats: true
 
   # whoami:
   #   container_name: whoami
