@@ -12,6 +12,7 @@ services:
           - ${TINYAUTH_SUBDOMAIN}
           - ${ACTUAL_SUBDOMAIN}
           - ${IMMICH_SUBDOMAIN}
+          - ${SPOOLMAN_SUBDOMAIN}
           - ${HOSTNAME}
     labels:
       caddy: (tinyauth_forwarder)
@@ -96,6 +97,22 @@ services:
       homepage.widget.url: https://${IMMICH_SUBDOMAIN}
       homepage.widget.key: ${IMMICH_KEY_API}
       homepage.widget.version: 2
+
+  spoolman:
+    networks:
+      - caddy_net
+    labels:
+      caddy: ${SPOOLMAN_SUBDOMAIN}
+      caddy.reverse_proxy: "{{upstreams 8000}}"
+      caddy.tls: "internal"
+      homepage.group: 3D Printing
+      homepage.name: Spoolman
+      homepage.icon: spoolman
+      homepage.href: http://${SPOOLMAN_SUBDOMAIN}
+      homepage.description: Keep track of your inventory of 3D-printer filament spools.
+      homepage.showStats: true
+      homepage.widget.type: spoolman
+      homepage.widget.url: https://${SPOOLMAN_SUBDOMAIN}
 
   # whoami:
   #   container_name: whoami

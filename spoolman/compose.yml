@@ -1,0 +1,9 @@
+services:
+  spoolman:
+    image: ghcr.io/donkie/spoolman:latest
+    container_name: spoolman
+    restart: unless-stopped
+    volumes:
+      - ./data:/home/app/.local/share/spoolman
+    environment:
+        TZ: Europe/Paris
