@@ -8,6 +8,7 @@ include:
   - ./immich/compose.yml
   - ./spoolman/compose.yml
   - ./manyfold/compose.yml
+  - ./vaultwarden/compose.yml
 
 services:
   go-avahi-cname:
@@ -16,4 +17,4 @@ services:
     network_mode: host
     volumes:
       - "/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket"
-    command: cname ${ACTUAL_NAME} ${TINYAUTH_NAME} ${POCKETID_NAME} ${IMMICH_NAME} ${SPOOLMAN_NAME} ${MANYFOLD_NAME}
+    command: cname ${ACTUAL_NAME} ${TINYAUTH_NAME} ${POCKETID_NAME} ${IMMICH_NAME} ${SPOOLMAN_NAME} ${MANYFOLD_NAME} ${VAULTWARDEN_NAME}

@@ -14,6 +14,7 @@ services:
           - ${IMMICH_SUBDOMAIN}
           - ${SPOOLMAN_SUBDOMAIN}
           - ${MANYFOLD_SUBDOMAIN}
+          - ${VAULTWARDEN_SUBDOMAIN}
           - ${HOSTNAME}
     labels:
       caddy: (tinyauth_forwarder)
@@ -127,6 +128,22 @@ services:
       homepage.icon: manyfold
       homepage.href: http://${MANYFOLD_SUBDOMAIN}
       homepage.description: Organise and share your 3d print files.
+      homepage.showStats: true
+
+  vaultwarden:
+    networks:
+      - caddy_net
+    environment:
+      DOMAIN: https://${VAULTWARDEN_SUBDOMAIN}
+    labels:
+      caddy: ${VAULTWARDEN_SUBDOMAIN}
+      caddy.reverse_proxy: "{{upstreams 80}}"
+      caddy.tls: "internal"
+      homepage.group: Auth
+      homepage.name: Vaultwarden
+      homepage.icon: vaultwarden
+      homepage.href: http://${VAULTWARDEN_SUBDOMAIN}
+      homepage.description: Access your sensitive information on any device with secure cloud sync.
       homepage.showStats: true
 
   # whoami:
