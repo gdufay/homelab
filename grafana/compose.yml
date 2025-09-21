@@ -1,0 +1,12 @@
+services:
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - grafana_storage:/var/lib/grafana
+    environment:
+      GF_SERVER_ENABLE_GZIP: true
+
+volumes:
+  grafana_storage:

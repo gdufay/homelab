@@ -130,3 +130,26 @@ services:
       homepage.href: http://${VAULTWARDEN_SUBDOMAIN}
       homepage.description: Access your sensitive information on any device with secure cloud sync.
       homepage.showStats: true
+
+  grafana:
+    networks:
+      - caddy_net
+    environment:
+      - GF_SERVER_ROOT_URL=https://${GRAFANA_SUBDOMAIN}
+      - GF_AUTH_GENERIC_OAUTH_CLIENT_ID=${GRAFANA_GENERIC_CLIENT_ID}
+      - GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET=${GRAFANA_GENERIC_CLIENT_SECRET}
+      - GF_AUTH_GENERIC_OAUTH_AUTH_URL=https://${POCKETID_SUBDOMAIN}/authorize
+      - GF_AUTH_GENERIC_OAUTH_TOKEN_URL=https://${POCKETID_SUBDOMAIN}/api/oidc/token
+      - GF_AUTH_GENERIC_OAUTH_API_URL=https://${POCKETID_SUBDOMAIN}/api/oidc/userinfo
+      - GF_AUTH_GENERIC_OAUTH_SCOPES=openid,email,profile,groups
+      - GF_AUTH_GENERIC_OAUTH_ENABLED=true
+      - GF_AUTH_GENERIC_OAUTH_USE_REFRESH_TOKEN=true
+    labels:
+      caddy: ${GRAFANA_SUBDOMAIN}
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+      homepage.group: Analytics
+      homepage.name: Grafana
+      homepage.icon: grafana
+      homepage.href: http://${GRAFANA_SUBDOMAIN}
+      homepage.description: Grafana is an analytics and interactive visualization web application.
+      homepage.showStats: true
