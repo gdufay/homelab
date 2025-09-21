@@ -1,6 +1,6 @@
 services:
   caddy-proxy:
-    image: lucaslorentz/caddy-docker-proxy:latest
+    build: .
     container_name: caddy_proxy
     ports:
       - 80:80

@@ -7,29 +7,21 @@ services:
   caddy-proxy:
     networks:
       caddy_net:
-        aliases:
-          - ${POCKETID_SUBDOMAIN}
-          - ${TINYAUTH_SUBDOMAIN}
-          - ${ACTUAL_SUBDOMAIN}
-          - ${IMMICH_SUBDOMAIN}
-          - ${SPOOLMAN_SUBDOMAIN}
-          - ${MANYFOLD_SUBDOMAIN}
-          - ${VAULTWARDEN_SUBDOMAIN}
-          - ${HOSTNAME}
     labels:
-      caddy: (tinyauth_forwarder)
-      caddy.forward_auth: tinyauth:3000
-      caddy.forward_auth.uri: /api/auth/caddy
+      caddy: "*.${HOSTNAME}"
+      caddy.tls.dns: duckdns ${DUCKDNS_TOKEN}
+      # caddy: (tinyauth_forwarder)
+      # caddy.forward_auth: tinyauth:3000
+      # caddy.forward_auth.uri: /api/auth/caddy
 
   homepage:
     networks:
       - caddy_net
     environment:
-      HOMEPAGE_ALLOWED_HOSTS: ${HOSTNAME}
+      HOMEPAGE_ALLOWED_HOSTS: ${HOMEPAGE_SUBDOMAIN}
     labels:
-      caddy: ${HOSTNAME}
+      caddy: ${HOMEPAGE_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 3000}}"
-      caddy.tls: "internal"
 
   actual-server:
     networks:
@@ -37,7 +29,6 @@ services:
     labels:
       caddy: ${ACTUAL_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 5006}}"
-      caddy.tls: "internal"
       homepage.group: Budget
       homepage.name: Actual Budget
       homepage.icon: actual-budget
@@ -54,7 +45,6 @@ services:
     labels:
       caddy: ${POCKETID_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 1411}}"
-      caddy.tls: "internal"
       homepage.group: Auth
       homepage.name: Pocket ID
       homepage.icon: pocket-id
@@ -80,7 +70,6 @@ services:
     labels:
       caddy: ${TINYAUTH_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 3000}}"
-      caddy.tls: "internal"
 
   immich-server:
     networks:
@@ -88,7 +77,6 @@ services:
     labels:
       caddy: ${IMMICH_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 2283}}"
-      caddy.tls: "internal"
       homepage.group: Media
       homepage.name: Immich
       homepage.icon: immich
@@ -106,7 +94,6 @@ services:
     labels:
       caddy: ${SPOOLMAN_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 8000}}"
-      caddy.tls: "internal"
       homepage.group: 3D Printing
       homepage.name: Spoolman
       homepage.icon: spoolman
@@ -122,7 +109,6 @@ services:
     labels:
       caddy: ${MANYFOLD_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 3214}}"
-      caddy.tls: "internal"
       homepage.group: 3D Printing
       homepage.name: Manyfold
       homepage.icon: manyfold
@@ -138,27 +124,9 @@ services:
     labels:
       caddy: ${VAULTWARDEN_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 80}}"
-      caddy.tls: "internal"
       homepage.group: Auth
       homepage.name: Vaultwarden
       homepage.icon: vaultwarden
       homepage.href: http://${VAULTWARDEN_SUBDOMAIN}
       homepage.description: Access your sensitive information on any device with secure cloud sync.
       homepage.showStats: true
-
-  # whoami:
-  #   container_name: whoami
-  #   image: traefik/whoami:latest
-  #   restart: unless-stopped
-  #   networks:
-  #     - caddy_net
-  #   labels:
-  #     caddy: whoami.rpi5.local
-  #     caddy.reverse_proxy: "{{upstreams 80}}"
-  #     caddy.tls: "internal"
-  #     caddy.import: tinyauth_forwarder *
-  #     homepage.group: Test
-  #     homepage.name: Whoami
-  #     homepage.icon: whoogle
-  #     homepage.href: http://whoami.rpi5.local
-  #     homepage.description: Test config
