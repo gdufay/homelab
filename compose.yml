@@ -7,6 +7,6 @@ include:
   - ./pocket-id/compose.yml
   - ./immich/compose.yml
   - ./spoolman/compose.yml
-  - ./manyfold/compose.yml
+  # - ./manyfold/compose.yml
   - ./vaultwarden/compose.yml
   - ./grafana/compose.yml

@@ -103,18 +103,18 @@ services:
       homepage.widget.type: spoolman
       homepage.widget.url: https://${SPOOLMAN_SUBDOMAIN}
 
-  manyfold:
-    networks:
-      - caddy_net
-    labels:
-      caddy: ${MANYFOLD_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 3214}}"
-      homepage.group: 3D Printing
-      homepage.name: Manyfold
-      homepage.icon: manyfold
-      homepage.href: http://${MANYFOLD_SUBDOMAIN}
-      homepage.description: Organise and share your 3d print files.
-      homepage.showStats: true
+  # manyfold:
+  #   networks:
+  #     - caddy_net
+  #   labels:
+  #     caddy: ${MANYFOLD_SUBDOMAIN}
+  #     caddy.reverse_proxy: "{{upstreams 3214}}"
+  #     homepage.group: 3D Printing
+  #     homepage.name: Manyfold
+  #     homepage.icon: manyfold
+  #     homepage.href: http://${MANYFOLD_SUBDOMAIN}
+  #     homepage.description: Organise and share your 3d print files.
+  #     homepage.showStats: true
 
   vaultwarden:
     networks:
