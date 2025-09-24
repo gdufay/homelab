@@ -10,3 +10,4 @@ include:
   # - ./manyfold/compose.yml
   - ./vaultwarden/compose.yml
   - ./grafana/compose.yml
+  - ./prometheus/compose.yml

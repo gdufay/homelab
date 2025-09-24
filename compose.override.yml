@@ -8,11 +8,11 @@ services:
     networks:
       caddy_net:
     labels:
-      caddy: "*.${HOSTNAME}"
-      caddy.tls.dns: duckdns ${DUCKDNS_TOKEN}
-      # caddy: (tinyauth_forwarder)
-      # caddy.forward_auth: tinyauth:3000
-      # caddy.forward_auth.uri: /api/auth/caddy
+      caddy_0: "*.${HOSTNAME}"
+      caddy_0.tls.dns: duckdns ${DUCKDNS_TOKEN}
+      caddy_1: (tinyauth_forwarder)
+      caddy_1.forward_auth: tinyauth:3000
+      caddy_1.forward_auth.uri: /api/auth/caddy
 
   homepage:
     networks:
@@ -153,3 +153,21 @@ services:
       homepage.href: http://${GRAFANA_SUBDOMAIN}
       homepage.description: Grafana is an analytics and interactive visualization web application.
       homepage.showStats: true
+
+  prometheus:
+    networks:
+      - caddy_net
+    labels:
+      caddy: ${PROMETHEUS_SUBDOMAIN}
+      caddy.0_handle: /api/*
+      caddy.0_handle.reverse_proxy: "{{upstreams 9090}}"
+      caddy.1_handle.import: tinyauth_forwarder *
+      caddy.1_handle.reverse_proxy: "{{upstreams 9090}}"
+      homepage.group: Analytics
+      homepage.name: Prometheus
+      homepage.icon: prometheus
+      homepage.href: http://${PROMETHEUS_SUBDOMAIN}
+      homepage.description: Prometheus is a systems and service monitoring system and time series database.
+      homepage.showStats: true
+      homepage.widget.type: prometheus
+      homepage.widget.url: https://${PROMETHEUS_SUBDOMAIN}
