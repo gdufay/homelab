@@ -1,12 +1,10 @@
 services:
   grafana:
-    image: grafana/grafana-oss
+    image: grafana/grafana
     container_name: grafana
     restart: unless-stopped
+    user: "1000"
     volumes:
-      - grafana_storage:/var/lib/grafana
+      - ./data:/var/lib/grafana
     environment:
       GF_SERVER_ENABLE_GZIP: true
-
-volumes:
-  grafana_storage:
