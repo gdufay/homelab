@@ -171,3 +171,20 @@ services:
       homepage.showStats: true
       homepage.widget.type: prometheus
       homepage.widget.url: https://${PROMETHEUS_SUBDOMAIN}
+
+  fresh-rss:
+    networks:
+      - caddy_net
+    labels:
+      caddy: ${FRESHRSS_SUBDOMAIN}
+      caddy.reverse_proxy: "{{upstreams 80}}"
+      homepage.group: News
+      homepage.name: FreshRSS
+      homepage.icon: freshrss
+      homepage.href: http://${FRESHRSS_SUBDOMAIN}
+      homepage.description: RSS feed aggregator.
+      homepage.showStats: true
+      homepage.widget.type: freshrss
+      homepage.widget.url: https://${FRESHRSS_SUBDOMAIN}
+      homepage.widget.username: ${FRESHRSS_USER}
+      homepage.widget.password: ${FRESHRSS_PASSWORD}

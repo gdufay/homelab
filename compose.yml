@@ -11,3 +11,4 @@ include:
   - ./vaultwarden/compose.yml
   - ./grafana/compose.yml
   - ./prometheus/compose.yml
+  - ./freshRSS/compose.yml
