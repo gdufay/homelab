@@ -6,4 +6,5 @@ services:
     volumes:
       - ./data:/home/app/.local/share/spoolman
     environment:
-        TZ: Europe/Paris
+      TZ: Europe/Paris
+      SPOOLMAN_METRICS_ENABLED: true
