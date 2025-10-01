@@ -26,6 +26,13 @@ services:
   actual-server:
     networks:
       - caddy_net
+    environment:
+      ACTUAL_OPENID_DISCOVERY_URL: https://${POCKETID_SUBDOMAIN}/.well-known/openid-configuration
+      ACTUAL_OPENID_CLIENT_ID: ${ACTUAL_CLIENT_ID}
+      ACTUAL_OPENID_CLIENT_SECRET: ${ACTUAL_CLIENT_SECRET}
+      ACTUAL_OPENID_SERVER_HOSTNAME: https://${ACTUAL_SUBDOMAIN}
+      ACTUAL_OPENID_ENFORCE: true
+      ACTUAL_TOKEN_EXPIRATION: openid-provider
     labels:
       caddy: ${ACTUAL_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 5006}}"
