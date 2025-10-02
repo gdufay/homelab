@@ -62,6 +62,8 @@ services:
   tinyauth:
     networks:
       - caddy_net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - SECRET=${TINYAUTH_SECRET}
       - APP_URL=https://${TINYAUTH_SUBDOMAIN}
@@ -73,7 +75,6 @@ services:
       - GENERIC_SCOPES=openid,email,profile,groups
       - GENERIC_NAME=Pocket ID
       - OAUTH_AUTO_REDIRECT=generic
-      - GENERIC_SKIP_SSL=true
     labels:
       caddy: ${TINYAUTH_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 3000}}"
@@ -101,6 +102,9 @@ services:
     labels:
       caddy: ${SPOOLMAN_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 8000}}"
+      caddy.import: tinyauth_forwarder *
+      tinyauth.oauth.groups: spoolman
+      tinyauth.allowed: ^\/api
       homepage.group: 3D Printing
       homepage.name: Spoolman
       homepage.icon: spoolman
