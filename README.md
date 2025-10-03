@@ -1,6 +1,6 @@
-# Gaetan Ubiquitous HomeLab
+# Gaetan UBIQuitous Homelab
 
-Welcome to my **GUHL** configuration repository! This repo contains all the configuration files, deployment scripts, and documentation for managing my home server infrastructure. The setup is orchestrated using [Docker Compose](https://docs.docker.com/compose/) and includes several containerized services.
+Welcome to my **GUBIQH** configuration repository! This repo contains all the configuration files, deployment scripts, and documentation for managing my home server infrastructure. The setup is orchestrated using [Docker Compose](https://docs.docker.com/compose/) and includes several containerized services.
 
 ---
 
@@ -62,7 +62,7 @@ Includes the following containers:
 | Service Name                                                             | Description                            | Domain      |
 |--------------                                                            |---------------------------------       |---------    |
 | [caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy) | Reverse Proxy & SSL with docker labels |             |
-| [homepage](https://gethomepage.dev)                                      | Dashboard                              | home        |
+| [homepage](https://gethomepage.dev)                                      | Dashboard                              |             |
 | [actual-budget](https://actualbudget.org)                                | Finance management                     | budget      |
 | [pocket-id](https://pocket-id.org)                                       | OIDC provider                          | pocket-id   |
 | [immich](https://docs.immich.app)                                        | Photo and video management             | immich      |
@@ -76,8 +76,8 @@ Includes the following containers:
 
 ## 🔄 Backups & Maintenance
 
-
 **TODO**
+
 - Define backup strategy for persistent volumes and configuration files.
 - Document backup scripts and procedures.
 
