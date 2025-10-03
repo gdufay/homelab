@@ -2,6 +2,9 @@ networks:
   caddy_net:
     driver: bridge
     name: caddy_network
+    ipam:
+      config:
+        - subnet: ${SUBNET_IP}
 
 services:
   caddy-proxy:
@@ -14,6 +17,9 @@ services:
       caddy_1: (tinyauth_forwarder)
       caddy_1.forward_auth: tinyauth:3000
       caddy_1.forward_auth.uri: /api/auth/caddy
+      caddy_3.servers.trusted_proxies: static ${SUBNET_IP}
+      caddy_3.servers.trusted_proxies_strict:
+      caddy_3.servers.client_ip_headers: X-Forwarded-For X-Real-IP
 
   homepage:
     networks:
@@ -105,7 +111,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 8000}}"
       caddy.import: tinyauth_forwarder *
       tinyauth.oauth.groups: spoolman
-      tinyauth.allowed: ^\/api
+      tinyauth.ip.bypass: ${SUBNET_IP}
       homepage.group: 3D Printing
       homepage.name: Spoolman
       homepage.icon: spoolman
@@ -171,10 +177,10 @@ services:
       - caddy_net
     labels:
       caddy: ${PROMETHEUS_SUBDOMAIN}
-      caddy.0_handle: /api/*
-      caddy.0_handle.reverse_proxy: "{{upstreams 9090}}"
-      caddy.1_handle.import: tinyauth_forwarder *
-      caddy.1_handle.reverse_proxy: "{{upstreams 9090}}"
+      tinyauth.ip.bypass: ${SUBNET_IP}
+      tinyauth.oauth.groups: prometheus
+      caddy.handle.import: tinyauth_forwarder *
+      caddy.handle.reverse_proxy: "{{upstreams 9090}}"
       homepage.group: Analytics
       homepage.name: Prometheus
       homepage.icon: prometheus
