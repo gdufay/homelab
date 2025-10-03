@@ -1,6 +1,6 @@
 services:
   fresh-rss:
-    image: freshrss/freshrss:alpine
+    image: freshrss/freshrss:latest
     container_name: fresh-rss
     volumes:
       - ./data:/var/www/FreshRSS/data

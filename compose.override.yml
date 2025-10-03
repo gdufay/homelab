@@ -187,6 +187,14 @@ services:
   fresh-rss:
     networks:
       - caddy_net
+    environment:
+      OIDC_ENABLED: 1
+      OIDC_CLIENT_ID: ${FRESHRSS_CLIENT_ID}
+      OIDC_CLIENT_SECRET: ${FRESHRSS_CLIENT_SECRET}
+      OIDC_PROVIDER_METADATA_URL: https://${POCKETID_SUBDOMAIN}/.well-known/openid-configuration
+      OIDC_SCOPES: openid email profile
+      OIDC_X_FORWARDED_HEADERS: X-Forwarded-Proto X-Forwarded-Host
+      OIDC_REMOTE_USER_CLAIM: preferred_username
     labels:
       caddy: ${FRESHRSS_SUBDOMAIN}
       caddy.reverse_proxy: "{{upstreams 80}}"
