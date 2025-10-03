@@ -9,7 +9,7 @@ services:
       caddy_net:
     labels:
       caddy_0: "*.${HOSTNAME}"
-      caddy_0.tls.dns: duckdns ${DUCKDNS_TOKEN}
+      caddy_0.tls.dns: cloudflare ${CLOUDFLARE_TOKEN}
       caddy_1: (tinyauth_forwarder)
       caddy_1.forward_auth: tinyauth:3000
       caddy_1.forward_auth.uri: /api/auth/caddy
