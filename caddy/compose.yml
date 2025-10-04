@@ -1,0 +1,13 @@
+services:
+  caddy:
+    build: .
+    container_name: caddy
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    volumes:
+      - ./data:/data
+      - ./config:/config
+      - ./caddy:/etc/caddy
+    restart: unless-stopped

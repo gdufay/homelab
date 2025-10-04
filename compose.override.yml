@@ -7,28 +7,18 @@ networks:
         - subnet: ${SUBNET_IP}
 
 services:
-  caddy-proxy:
+  caddy:
     networks:
       caddy_net:
-    labels:
-      caddy_0.acme_dns: cloudflare ${CLOUDFLARE_TOKEN}
-      caddy_2: "*.${HOSTNAME}"
-      caddy_2.redir: https://${HOSTNAME}
-      caddy_1: (tinyauth_forwarder)
-      caddy_1.forward_auth: tinyauth:3000
-      caddy_1.forward_auth.uri: /api/auth/caddy
-      caddy_3.servers.trusted_proxies: static ${SUBNET_IP}
-      caddy_3.servers.trusted_proxies_strict:
-      caddy_3.servers.client_ip_headers: X-Forwarded-For X-Real-IP
+    environment:
+      HOST: ${HOSTNAME}
+      CLOUDFLARE_TOKEN: ${CLOUDFLARE_TOKEN}
 
   homepage:
     networks:
       - caddy_net
     environment:
       HOMEPAGE_ALLOWED_HOSTS: ${HOMEPAGE_SUBDOMAIN}
-    labels:
-      caddy: ${HOMEPAGE_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 3000}}"
 
   actual-server:
     networks:
@@ -41,8 +31,6 @@ services:
       ACTUAL_OPENID_ENFORCE: true
       ACTUAL_TOKEN_EXPIRATION: openid-provider
     labels:
-      caddy: ${ACTUAL_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 5006}}"
       homepage.group: Budget
       homepage.name: Actual Budget
       homepage.icon: actual-budget
@@ -57,8 +45,6 @@ services:
       - TRUST_PROXY=true
       - APP_URL=https://${POCKETID_SUBDOMAIN}
     labels:
-      caddy: ${POCKETID_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 1411}}"
       homepage.group: Auth
       homepage.name: Pocket ID
       homepage.icon: pocket-id
@@ -82,16 +68,11 @@ services:
       - GENERIC_SCOPES=openid,email,profile,groups
       - GENERIC_NAME=Pocket ID
       - OAUTH_AUTO_REDIRECT=generic
-    labels:
-      caddy: ${TINYAUTH_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 3000}}"
 
   immich-server:
     networks:
       - caddy_net
     labels:
-      caddy: ${IMMICH_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 2283}}"
       homepage.group: Media
       homepage.name: Immich
       homepage.icon: immich
@@ -107,9 +88,6 @@ services:
     networks:
       - caddy_net
     labels:
-      caddy: ${SPOOLMAN_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 8000}}"
-      caddy.import: tinyauth_forwarder *
       tinyauth.oauth.groups: spoolman
       tinyauth.ip.bypass: ${SUBNET_IP}
       homepage.group: 3D Printing
@@ -125,8 +103,6 @@ services:
   #   networks:
   #     - caddy_net
   #   labels:
-  #     caddy: ${MANYFOLD_SUBDOMAIN}
-  #     caddy.reverse_proxy: "{{upstreams 3214}}"
   #     homepage.group: 3D Printing
   #     homepage.name: Manyfold
   #     homepage.icon: manyfold
@@ -140,8 +116,6 @@ services:
     environment:
       DOMAIN: https://${VAULTWARDEN_SUBDOMAIN}
     labels:
-      caddy: ${VAULTWARDEN_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 80}}"
       homepage.group: Auth
       homepage.name: Vaultwarden
       homepage.icon: vaultwarden
@@ -163,8 +137,6 @@ services:
       - GF_AUTH_GENERIC_OAUTH_ENABLED=true
       - GF_AUTH_GENERIC_OAUTH_USE_REFRESH_TOKEN=true
     labels:
-      caddy: ${GRAFANA_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 3000}}"
       homepage.group: Analytics
       homepage.name: Grafana
       homepage.icon: grafana
@@ -176,11 +148,8 @@ services:
     networks:
       - caddy_net
     labels:
-      caddy: ${PROMETHEUS_SUBDOMAIN}
       tinyauth.ip.bypass: ${SUBNET_IP}
       tinyauth.oauth.groups: prometheus
-      caddy.handle.import: tinyauth_forwarder *
-      caddy.handle.reverse_proxy: "{{upstreams 9090}}"
       homepage.group: Analytics
       homepage.name: Prometheus
       homepage.icon: prometheus
@@ -202,8 +171,6 @@ services:
       OIDC_X_FORWARDED_HEADERS: X-Forwarded-Proto X-Forwarded-Host
       OIDC_REMOTE_USER_CLAIM: preferred_username
     labels:
-      caddy: ${FRESHRSS_SUBDOMAIN}
-      caddy.reverse_proxy: "{{upstreams 80}}"
       homepage.group: News
       homepage.name: FreshRSS
       homepage.icon: freshrss

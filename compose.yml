@@ -1,6 +1,5 @@
 include:
-  # - ./adguard/compose.yml
-  - ./caddy-proxy/compose.yml
+  - ./caddy/compose.yml
   - ./homepage/compose.yml
   - ./actual-budget/compose.yml
   - ./tinyauth/compose.yml

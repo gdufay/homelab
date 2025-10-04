@@ -1,0 +1,67 @@
+{
+	acme_dns cloudflare {$CLOUDFLARE_TOKEN}
+
+	admin :2019
+
+	metrics
+
+	servers {
+		client_ip_headers X-Forwarded-For X-Real-IP
+		trusted_proxies static 172.18.0.0/16
+		trusted_proxies_strict
+	}
+}
+
+(tinyauth_forwarder) {
+	forward_auth tinyauth:3000 {
+		uri /api/auth/caddy
+	}
+}
+
+*.{$HOST} {
+	redir https://{$HOST}
+}
+
+budget.{$HOST} {
+	reverse_proxy actual-server:5006
+}
+
+grafana.{$HOST} {
+	reverse_proxy grafana:3000
+}
+
+{$HOST} {
+	reverse_proxy homepage:3000
+}
+
+immich.{$HOST} {
+	reverse_proxy immich-server:2283
+}
+
+pocket-id.{$HOST} {
+	reverse_proxy pocket-id:1411
+}
+
+prometheus.{$HOST} {
+	handle {
+		import tinyauth_forwarder *
+		reverse_proxy prometheus:9090
+	}
+}
+
+rss.{$HOST} {
+	reverse_proxy fresh-rss:80
+}
+
+spoolman.{$HOST} {
+	import tinyauth_forwarder *
+	reverse_proxy spoolman:8000
+}
+
+tinyauth.{$HOST} {
+	reverse_proxy tinyauth:3000
+}
+
+vault.{$HOST} {
+	reverse_proxy vaultwarden:80
+}
