@@ -25,11 +25,11 @@ services:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/data
       - /etc/localtime:/etc/localtime:ro
-      - /media/gdufay/HDD1/backup/photos:/mnt/media/hdd-photos:ro
+      # - /media/gdufay/HDD1/backup/photos:/mnt/media/hdd-photos:ro
     env_file:
       - .env
     networks:
-        - immich_net
+      - immich_net
     # ports:
     #   - '2283:2283'
     depends_on:
@@ -52,7 +52,7 @@ services:
     env_file:
       - .env
     networks:
-        - immich_net
+      - immich_net
     restart: always
     healthcheck:
       disable: false
@@ -61,7 +61,7 @@ services:
     container_name: immich_redis
     image: docker.io/valkey/valkey:8-bookworm@sha256:a137a2b60aca1a75130022d6bb96af423fefae4eb55faf395732db3544803280
     networks:
-        - immich_net
+      - immich_net
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
@@ -73,14 +73,14 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_DB: ${DB_DATABASE_NAME}
-      POSTGRES_INITDB_ARGS: '--data-checksums'
+      POSTGRES_INITDB_ARGS: "--data-checksums"
       # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
       # DB_STORAGE_TYPE: 'HDD'
     volumes:
       # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .env file
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     networks:
-        - immich_net
+      - immich_net
     shm_size: 128mb
     restart: always
 

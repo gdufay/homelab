@@ -3,7 +3,9 @@
 
 	admin :2019
 
-	metrics
+	metrics {
+		per_host
+	}
 
 	servers {
 		client_ip_headers X-Forwarded-For X-Real-IP

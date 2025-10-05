@@ -143,6 +143,11 @@ services:
       homepage.href: http://${GRAFANA_SUBDOMAIN}
       homepage.description: Grafana is an analytics and interactive visualization web application.
       homepage.showStats: true
+      homepage.widget.type: grafana
+      homepage.widget.version: 2
+      homepage.widget.url: https://${GRAFANA_SUBDOMAIN}
+      homepage.widget.username: admin
+      homepage.widget.password: Grafana.299792458
 
   prometheus:
     networks:
