@@ -1,5 +1,7 @@
 services:
   tinyauth:
-    image: ghcr.io/steveiliop56/tinyauth:v3
+    image: ghcr.io/steveiliop56/tinyauth:v5
     container_name: tinyauth
     restart: unless-stopped
+    volumes:
+      - ./data:/data

@@ -58,16 +58,17 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - SECRET=${TINYAUTH_SECRET}
-      - APP_URL=https://${TINYAUTH_SUBDOMAIN}
-      - GENERIC_CLIENT_ID=${TINYAUTH_GENERIC_CLIENT_ID}
-      - GENERIC_CLIENT_SECRET=${TINYAUTH_GENERIC_CLIENT_SECRET}
-      - GENERIC_AUTH_URL=https://${POCKETID_SUBDOMAIN}/authorize
-      - GENERIC_TOKEN_URL=https://${POCKETID_SUBDOMAIN}/api/oidc/token
-      - GENERIC_USER_URL=https://${POCKETID_SUBDOMAIN}/api/oidc/userinfo
-      - GENERIC_SCOPES=openid,email,profile,groups
-      - GENERIC_NAME=Pocket ID
-      - OAUTH_AUTO_REDIRECT=generic
+      - TINYAUTH_APPURL=https://${TINYAUTH_SUBDOMAIN}
+      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTID=${TINYAUTH_GENERIC_CLIENT_ID}
+      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_CLIENTSECRET=${TINYAUTH_GENERIC_CLIENT_SECRET}
+      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_AUTHURL=https://${POCKETID_SUBDOMAIN}/authorize
+      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_TOKENURL=https://${POCKETID_SUBDOMAIN}/api/oidc/token
+      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_USERINFOURL=https://${POCKETID_SUBDOMAIN}/api/oidc/userinfo
+      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_REDIRECTURL=https://${TINYAUTH_SUBDOMAIN}/api/oauth/callback/pocketid
+      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES=openid,email,profile,groups
+      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_NAME=Pocket ID
+      - TINYAUTH_OAUTH_AUTOREDIRECT=pocketid
+
 
   immich-server:
     networks:
@@ -88,8 +89,8 @@ services:
     networks:
       - caddy_net
     labels:
-      tinyauth.oauth.groups: spoolman
-      tinyauth.ip.bypass: ${SUBNET_IP}
+      tinyauth.apps.spoolman.oauth.groups: spoolman
+      tinyauth.apps.spoolman.ip.bypass: ${SUBNET_IP}
       homepage.group: 3D Printing
       homepage.name: Spoolman
       homepage.icon: spoolman
@@ -153,8 +154,8 @@ services:
     networks:
       - caddy_net
     labels:
-      tinyauth.ip.bypass: ${SUBNET_IP}
-      tinyauth.oauth.groups: prometheus
+      tinyauth.apps.prometheus.oauth.groups: prometheus
+      tinyauth.apps.prometheus.ip.bypass: ${SUBNET_IP}
       homepage.group: Analytics
       homepage.name: Prometheus
       homepage.icon: prometheus
