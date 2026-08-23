@@ -65,7 +65,7 @@ services:
       - TINYAUTH_OAUTH_PROVIDERS_POCKETID_TOKENURL=https://${POCKETID_SUBDOMAIN}/api/oidc/token
       - TINYAUTH_OAUTH_PROVIDERS_POCKETID_USERINFOURL=https://${POCKETID_SUBDOMAIN}/api/oidc/userinfo
       - TINYAUTH_OAUTH_PROVIDERS_POCKETID_REDIRECTURL=https://${TINYAUTH_SUBDOMAIN}/api/oauth/callback/pocketid
-      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES=openid,email,profile,groups
+      - TINYAUTH_OAUTH_PROVIDERS_POCKETID_SCOPES=openid email profile groups
       - TINYAUTH_OAUTH_PROVIDERS_POCKETID_NAME=Pocket ID
       - TINYAUTH_OAUTH_AUTOREDIRECT=pocketid
 
@@ -97,8 +97,6 @@ services:
       homepage.href: http://${SPOOLMAN_SUBDOMAIN}
       homepage.description: Keep track of your inventory of 3D-printer filament spools.
       homepage.showStats: true
-      homepage.widget.type: spoolman
-      homepage.widget.url: https://${SPOOLMAN_SUBDOMAIN}
 
   # manyfold:
   #   networks:
@@ -162,8 +160,6 @@ services:
       homepage.href: http://${PROMETHEUS_SUBDOMAIN}
       homepage.description: Prometheus is a systems and service monitoring system and time series database.
       homepage.showStats: true
-      homepage.widget.type: prometheus
-      homepage.widget.url: https://${PROMETHEUS_SUBDOMAIN}
 
   fresh-rss:
     networks:

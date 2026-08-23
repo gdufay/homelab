@@ -1,6 +1,6 @@
 services:
   fresh-rss:
-    image: freshrss/freshrss:1.28.1
+    image: freshrss/freshrss:1.29.1
     container_name: fresh-rss
     volumes:
       - ./data:/var/www/FreshRSS/data
